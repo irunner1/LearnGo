@@ -1,23 +1,23 @@
 package main
 
-// Errors in map
+// Errors in map.
 const (
 	ErrNotFound         = DictionaryErr("could not find the word you were looking for")
 	ErrWordExists       = DictionaryErr("cannot add word because it already exists")
 	ErrWordDoesNotExist = DictionaryErr("cannot update word because it does not exist")
 )
 
-// DictionaryErr for errors in dict
+// DictionaryErr for errors in dict.
 type DictionaryErr string
 
 func (e DictionaryErr) Error() string {
 	return string(e)
 }
 
-// Dictionary map of keys and values
+// Dictionary map of keys and values.
 type Dictionary map[string]string
 
-// Search returns word from dict
+// Search returns word from dict.
 func (d Dictionary) Search(word string) (string, error) {
 	definition, status := d[word]
 
@@ -28,7 +28,7 @@ func (d Dictionary) Search(word string) (string, error) {
 	return definition, nil
 }
 
-// Add something to map
+// Add something to map.
 func (d Dictionary) Add(key, value string) error {
 	_, status := d.Search(key)
 
@@ -43,7 +43,7 @@ func (d Dictionary) Add(key, value string) error {
 	return nil
 }
 
-// Update dict value by key
+// Update dict value by key.
 func (d Dictionary) Update(word, definition string) error {
 	_, err := d.Search(word)
 
@@ -59,7 +59,7 @@ func (d Dictionary) Update(word, definition string) error {
 	return nil
 }
 
-// Delete by key from dict
+// Delete by key from dict.
 func (d Dictionary) Delete(word string) {
 	delete(d, word)
 }
