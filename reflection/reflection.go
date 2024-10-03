@@ -1,6 +1,8 @@
 package main
 
-import "reflect"
+import (
+	"reflect"
+)
 
 func walk(x interface{}, fn func(input string)) {
 	val := getValue(x)
@@ -25,17 +27,8 @@ func walk(x interface{}, fn func(input string)) {
 			walkValue(val.MapIndex(key))
 		}
 	case reflect.Chan:
-		for {
-			if v, ok := val.Recv(); ok {
-				walkValue(v)
-			} else {
-				break
-			}
-		}
-	case reflect.Func:
-		valFnResult := val.Call(nil)
-		for _, res := range valFnResult {
-			walkValue(res)
+		for v, ok := val.Recv(); ok; v, ok = val.Recv() {
+			walkValue(v)
 		}
 	}
 }
@@ -43,8 +36,9 @@ func walk(x interface{}, fn func(input string)) {
 func getValue(x interface{}) reflect.Value {
 	val := reflect.ValueOf(x)
 
-	if val.Kind() == reflect.Pointer {
+	if val.Kind() == reflect.Ptr {
 		val = val.Elem()
 	}
+
 	return val
 }
